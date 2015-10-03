@@ -17,24 +17,38 @@ public class StateAndReward {
 		  			|
 		 			
 		 */
-		if(angle >-1.5 && angle <= 0){
-			state="A";
-		}else if(angle > 0 && angle <= 1.5){
-			state="B";
+		if(angle >-1.5 && angle <= 0.03){
+			state="STATE-A";
+		}else if(angle > 0.03 && angle <= 1.5){
+			state="STATE-B";
+		}else if(angle>-0.03 && angle <= 0.03){
+			state="STATE-G";
 		}else if(angle > 1.5 && angle <= 3.2){
-			state="C";
+			state="STATE-C";
 		}else{
-			state="D";
+			state="STATE-D";
 		}
 		return state;
 	}
 
 	/* Reward function for the angle controller */
 	public static double getRewardAngle(double angle, double vx, double vy) {
-
-		/* TODO: IMPLEMENT THIS FUNCTION */
-		
 		double reward = 0;
+		
+		if(angle >-1.5 && angle <= 0.03){
+			// STATE A
+			reward=3;
+		}else if(angle > 0.03 && angle <= 1.5){
+			// STATE-B
+			reward=3;
+		}else if(angle > -0.03 && angle <= 0.03){
+			// Goal state
+			reward=10;
+		}else if(angle > 1.5 && angle <= 3.2){
+			// STATE D
+		}else{
+			//STATE-D
+		}
 
 		return reward;
 	}

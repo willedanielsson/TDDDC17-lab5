@@ -24,7 +24,7 @@ public class QLearningController extends Controller {
 	RocketEngine middleEngine;
 	RocketEngine rightEngine;
 
-	final static int NUM_ACTIONS = 7; /* The takeAction function must be changed if this is modified */
+	final static int NUM_ACTIONS = 4; /* The takeAction function must be changed if this is modified */
 	
 	/* Keep track of the previous state and action */
 	String previous_state = null;
@@ -81,6 +81,51 @@ public class QLearningController extends Controller {
 		rightEngine.setBursting(false);
 		middleEngine.setBursting(false);
 	}
+	
+	void forward() {
+		leftEngine.setBursting(false);
+		rightEngine.setBursting(false);
+		middleEngine.setBursting(true);
+	}
+	
+	void rotateLeft(){
+		leftEngine.setBursting(false);
+		rightEngine.setBursting(true);
+		middleEngine.setBursting(false);
+	}
+	
+	void rotateRight() {
+		leftEngine.setBursting(true);
+		rightEngine.setBursting(false);
+		middleEngine.setBursting(false);
+	}
+	
+	void forwardAndLeft() {
+		leftEngine.setBursting(false);
+		rightEngine.setBursting(true);
+		middleEngine.setBursting(true);
+	}
+	
+	void forwardAndRight() {
+		leftEngine.setBursting(true);
+		rightEngine.setBursting(false);
+		middleEngine.setBursting(true);
+	}
+	
+	void forwardHyper() {
+		leftEngine.setBursting(true);
+		rightEngine.setBursting(true);
+		middleEngine.setBursting(true);
+	}
+	
+	public static final int ACTION_NONE = 0;
+	public static final int ACTION_CENTER = 1;
+	public static final int ACTION_LEFT = 2;
+	public static final int ACTION_RIGHT = 3;
+	//public static final int ACTION_FORWARDRIGHT = 4;
+	//public static final int ACTION_FORWARDLEFT = 5;
+	//public static final int ACTION_ALLCENTER = 6;
+	
 
 	/* Performs the chosen action */
 	void performAction(int action) {
@@ -88,7 +133,31 @@ public class QLearningController extends Controller {
 		/* Fire zeh rockets! */
 		/* TODO: Remember to change NUM_ACTIONS constant to reflect the number of actions (including 0, no action) */
 		
-		/* TODO: IMPLEMENT THIS FUNCTION */
+		switch (action) {
+		case ACTION_NONE:
+			resetRockets();
+			break;
+		case ACTION_CENTER:
+			forward();
+			break;
+		case ACTION_LEFT:
+			rotateLeft();
+			break;
+		case ACTION_RIGHT:
+			rotateRight();
+			break;
+		/*case ACTION_FORWARDLEFT:
+			forwardAndLeft();
+			break;
+		case ACTION_FORWARDRIGHT:
+			forwardAndRight();
+			break;
+		case ACTION_ALLCENTER:
+			forwardHyper();
+			break;*/
+		default:
+			break;
+		}
 		
 	}
 
@@ -121,13 +190,14 @@ public class QLearningController extends Controller {
 				/* Update Q value */
 				if (Qtable.get(prev_stateaction) == null) {
 					Qtable.put(prev_stateaction, 0.0);
+				}else{
+					/* TODO: IMPLEMENT Q-UPDATE HERE! */
+					
+					/* See top for constants and below for helper functions */
+					
+					double value = Qtable.get(prev_stateaction) + alpha(Ntable.get(prev_stateaction)) *(previous_reward+GAMMA_DISCOUNT_FACTOR*getMaxActionQValue(new_state) - Qtable.get(prev_stateaction));
+					Qtable.put(prev_stateaction, value);
 				} 
-
-				
-				/* TODO: IMPLEMENT Q-UPDATE HERE! */
-				
-				/* See top for constants and below for helper functions */
-				
 				
 				int action = selectAction(new_state); /* Make sure you understand how it selects an action */
 
