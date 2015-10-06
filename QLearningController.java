@@ -100,31 +100,10 @@ public class QLearningController extends Controller {
 		middleEngine.setBursting(false);
 	}
 	
-	void forwardAndLeft() {
-		leftEngine.setBursting(false);
-		rightEngine.setBursting(true);
-		middleEngine.setBursting(true);
-	}
-	
-	void forwardAndRight() {
-		leftEngine.setBursting(true);
-		rightEngine.setBursting(false);
-		middleEngine.setBursting(true);
-	}
-	
-	void forwardHyper() {
-		leftEngine.setBursting(true);
-		rightEngine.setBursting(true);
-		middleEngine.setBursting(true);
-	}
-	
 	public static final int ACTION_NONE = 0;
 	public static final int ACTION_CENTER = 1;
 	public static final int ACTION_LEFT = 2;
 	public static final int ACTION_RIGHT = 3;
-	//public static final int ACTION_FORWARDRIGHT = 4;
-	//public static final int ACTION_FORWARDLEFT = 5;
-	//public static final int ACTION_ALLCENTER = 6;
 	
 
 	/* Performs the chosen action */
@@ -146,15 +125,6 @@ public class QLearningController extends Controller {
 		case ACTION_RIGHT:
 			rotateRight();
 			break;
-		/*case ACTION_FORWARDLEFT:
-			forwardAndLeft();
-			break;
-		case ACTION_FORWARDRIGHT:
-			forwardAndRight();
-			break;
-		case ACTION_ALLCENTER:
-			forwardHyper();
-			break;*/
 		default:
 			break;
 		}
