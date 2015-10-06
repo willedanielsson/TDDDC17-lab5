@@ -54,20 +54,22 @@ public class StateAndReward {
 	}
 	
 	// Changed from 14,9, 4
+	// Res will be number of values that can be return from the discretize.
+	// Bound are the min and max number 
 	public static final int ANGLE_RES = 11;
-	public static final int VX_RES = 7;
+	public static final int ANGLE_BOUND = 1;
 	public static final int VY_RES = 7;
-	public static final int VEL_BOUND=1;
+	public static final int VEL_BOUND = 1;
 
 	/* State discretization function for the full hover controller */
 	public static String getStateHover(double angle, double vx, double vy) {
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
 		
-		// From -1.5, -1.5
+		//
 		String state = 
-				"STATE-ANGLE-" + discretize(angle, ANGLE_RES, -0.8, 0.8) +
-				"-VY-" + discretize(vy, VY_RES, -VEL_BOUND-3, VEL_BOUND);
+				"STATE-ANGLE-" + discretize(angle, ANGLE_RES, -ANGLE_BOUND, ANGLE_BOUND) +
+				"-VY-" + discretize(vy, VY_RES, -VEL_BOUND, VEL_BOUND);
 
 		return state;
 	}
@@ -79,9 +81,10 @@ public class StateAndReward {
 		double angle_reward = 0;
 		double y_reward = 0;
 		
-		int angle_state = discretize(angle, ANGLE_RES, -3, 3);
+		int angle_state = discretize(angle, ANGLE_RES, -ANGLE_BOUND, ANGLE_BOUND);
 		int y_state = discretize(vy, VY_RES, -VEL_BOUND, VEL_BOUND);
 		
+		// The optimal values (the half of what it can be)
 		int angle_opt = (ANGLE_RES-1)/2;
 		int y_opt = (VY_RES-1)/2;
 		
@@ -92,7 +95,7 @@ public class StateAndReward {
 		}
 		
 		if(y_state==y_opt){
-			y_reward= 5*y_opt;
+			y_reward= 4*y_opt;
 		}else{
 			y_reward = (y_opt - Math.abs(y_state - y_opt));
 		}

@@ -175,7 +175,7 @@ public class QLearningController extends Controller {
 				return;
 			}
 			// GetRewardAngle -> GetRewardHover
-			double previous_reward = StateAndReward.getRewardHover(previous_angle, previous_vx, previous_vy);
+			double reward = StateAndReward.getRewardHover(previous_angle, previous_vx, previous_vy);
 			action_counter = 0;
 
 			/* The agent is in a new state, do learning and action selection */
@@ -196,8 +196,8 @@ public class QLearningController extends Controller {
 					/* TODO: IMPLEMENT Q-UPDATE HERE! */
 					
 					/* See top for constants and below for helper functions */
-					
-					double value = Qtable.get(prev_stateaction) + alpha(Ntable.get(prev_stateaction)) *(previous_reward+GAMMA_DISCOUNT_FACTOR*getMaxActionQValue(new_state) - Qtable.get(prev_stateaction));
+					// Core is that it assumes the old value and makes correction based on the new information
+					double value = Qtable.get(prev_stateaction) + alpha(Ntable.get(prev_stateaction)) *(reward+GAMMA_DISCOUNT_FACTOR*getMaxActionQValue(new_state) - Qtable.get(prev_stateaction));
 					Qtable.put(prev_stateaction, value);
 				} 
 				
@@ -210,7 +210,7 @@ public class QLearningController extends Controller {
 				if (print_counter % 10 == 0) {
 					System.out.println("ITERATION: " + iteration + " SENSORS: a=" + df.format(angle.getValue()) + " vx=" + df.format(vx.getValue()) + 
 							" vy=" + df.format(vy.getValue()) + " P_STATE: " + previous_state + " P_ACTION: " + previous_action + 
-							" P_REWARD: " + df.format(previous_reward) + " P_QVAL: " + df.format(Qtable.get(prev_stateaction)) + " Tested: "
+							" P_REWARD: " + df.format(reward) + " P_QVAL: " + df.format(Qtable.get(prev_stateaction)) + " Tested: "
 							+ Ntable.get(prev_stateaction) + " times.");
 				}
 				
